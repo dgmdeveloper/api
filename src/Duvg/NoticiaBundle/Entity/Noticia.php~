@@ -1,0 +1,289 @@
+<?php
+
+namespace Duvg\NoticiaBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+/**
+ * Noticia
+ *
+ * @ORM\Table(name="noticia")
+ * @ORM\Entity(repositoryClass="Duvg\NoticiaBundle\Repository\NoticiaRepository")
+ * @ORM\HasLifecycleCallbacks
+ */
+class Noticia
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="titulo", type="string", length=150)
+     */
+    private $titulo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="contenido", type="text")
+     */
+    private $contenido;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Categorias")
+     * @ORM\JoinColumn(name="categorias_id", referencedColumnName="id")
+     */
+    private $categoria;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="ApiBundle/User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    private $usuario;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="imgNoticia", type="string", length=255)
+     */
+    private $imgNoticia;
+
+    /**
+     * @Assert\File(maxSize="6000000")
+     */
+    private $file;
+
+    /**
+     * @var datetime $created
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     */
+    private $created;
+
+    /**
+     * @var datetime $updated
+     *
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
+     */
+    private $updated;
+
+
+
+
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set titulo
+     *
+     * @param string $titulo
+     * @return Noticia
+     */
+    public function setTitulo($titulo)
+    {
+        $this->titulo = $titulo;
+
+        return $this;
+    }
+
+    /**
+     * Get titulo
+     *
+     * @return string 
+     */
+    public function getTitulo()
+    {
+        return $this->titulo;
+    }
+
+    /**
+     * Set contenido
+     *
+     * @param string $contenido
+     * @return Noticia
+     */
+    public function setContenido($contenido)
+    {
+        $this->contenido = $contenido;
+
+        return $this;
+    }
+
+    /**
+     * Get contenido
+     *
+     * @return string 
+     */
+    public function getContenido()
+    {
+        return $this->contenido;
+    }
+
+    /**
+     * Set categoria
+     *
+     * @param \Duvg\NoticiaBundle\Entity\Categorias $categoria
+     * @return Noticia
+     */
+    public function setCategoria(\Duvg\NoticiaBundle\Entity\Categorias $categoria = null)
+    {
+        $this->categoria = $categoria;
+
+        return $this;
+    }
+
+    /**
+     * Get categoria
+     *
+     * @return \Duvg\NoticiaBundle\Entity\Categorias 
+     */
+    public function getCategoria()
+    {
+        return $this->categoria;
+    }
+
+    public function __construct() {
+        // we set up "created"+"modified"
+        $this->setCreated(new \DateTime());
+        if ($this->getUpdated() == null) {
+            $this->setUpdated(new \DateTime());
+        }
+    }
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function updateModifiedDatetime() {
+        // update the modified time
+        $this->setUpdated(new \DateTime());
+    }
+
+    /**
+     * Set created
+     *
+     * @param \DateTime $created
+     *
+     * @return Noticia
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * Get created
+     *
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * Set updated
+     *
+     * @param \DateTime $updated
+     *
+     * @return Noticia
+     */
+    public function setUpdated($updated)
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * Get updated
+     *
+     * @return \DateTime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
+    //generar  una cadena aleatoria
+    public function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+    /**
+     * Set imgNoticia
+     *
+     * @param string $imgNoticia
+     *
+     * @return Noticia
+     */
+    public function setImgNoticia($imgNoticia)
+    {
+        $this->imgNoticia = $imgNoticia;
+
+        return $this;
+    }
+
+    /**
+     * Get imgNoticia
+     *
+     * @return string
+     */
+    public function getImgNoticia()
+    {
+        return $this->imgNoticia;
+    }
+
+    /**
+     * Set usuario
+     *
+     * @param \Duvg\NoticiaBundle\Entity\User $usuario
+     *
+     * @return Noticia
+     */
+    public function setUsuario(\Duvg\NoticiaBundle\Entity\User $usuario = null)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return \Duvg\NoticiaBundle\Entity\User
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
+    }
+}

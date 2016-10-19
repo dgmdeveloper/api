@@ -1,0 +1,7 @@
+duvg_api_Usuarios:
+    type: rest
+    resource: Duvg\ApiBundle\Controller\UserController
+
+duvg_api_Test:
+    type: rest
+    resource: Duvg\ApiBundle\Controller\TestController

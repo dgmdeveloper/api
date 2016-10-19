@@ -1,3 +1,29 @@
+#noticia:
+#    resource: "@NoticiaBundle/Controller/"
+#    type:     annotation
+#    prefix:   /
+
+#NelmioApiDocBundle:
+#    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+#    prefix:   /api/doc
+
+fos_oauth_server_token:
+    resource: "@FOSOAuthServerBundle/Resources/config/routing/token.xml"
+    
+#api_bundle:
+#    resource: "@ApiBundle/Resources/config/routing.yml"
+
+noticia_bundle:
+    type: rest
+    resource: "@NoticiaBundle/Resources/config/routing.yml"
+
+api_bundle:
+    type: rest
+    resource: "@ApiBundle/Resources/config/routing.yml"
+
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation
+
+
+

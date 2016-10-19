@@ -1,0 +1,8 @@
+categorias:
+    type: rest
+    resource: Duvg\NoticiaBundle\Controller\CategoriasController
+
+Noticias:
+    resource: Duvg\NoticiaBundle\Controller\NoticiaController
+    type: rest
+    parent:   categorias

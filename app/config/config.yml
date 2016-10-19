@@ -2,11 +2,14 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
+    - { resource: "@ApiBundle/Resources/config/services.yml" }
+    - { resource: "@NoticiaBundle/Resources/config/services.yml" }
+    - { resource: "@ApiBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    locale: en
+    locale: es
 
 framework:
     #esi:             ~
@@ -18,7 +21,7 @@ framework:
     form:            ~
     csrf_protection: ~
     validation:      { enable_annotations: true }
-    #serializer:      { enable_annotations: true }
+    serializer:      { enable_annotations: true }
     templating:
         engines: ['twig']
     default_locale:  "%locale%"
@@ -54,8 +57,15 @@ doctrine:
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
-        naming_strategy: doctrine.orm.naming_strategy.underscore
+        #naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
+        #entity_managers:
+        #    default:
+        #        mappings:
+        #            ApiBundle: ~
+        #            NoticiaBundle: ~
+        #            FOSUserBundle: ~
+        #            FOSOAuthServerBundle: ~
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -64,3 +74,30 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+
+#nelmio_api_doc: ~
+
+fos_rest:
+    routing_loader:
+        default_format: json                            # All responses should be JSON formated
+        include_format: false                           # We do not include format in request, so that all responses
+                                                        # will eventually be JSON formated
+    view:
+        empty_content: 204
+
+fos_user:
+    db_driver: orm
+    firewall_name: api                                  # Seems to be used when registering user/reseting password,
+                                                        # but since there is no "login", as so it seems to be useless in
+                                                        # our particular context, but still required by "FOSUserBundle"
+    user_class: Duvg\ApiBundle\Entity\User
+
+fos_oauth_server:
+    db_driver:           orm
+    client_class:        Duvg\ApiBundle\Entity\Client
+    access_token_class:  Duvg\ApiBundle\Entity\AccessToken
+    refresh_token_class: Duvg\ApiBundle\Entity\RefreshToken
+    auth_code_class:     Duvg\ApiBundle\Entity\AuthCode
+    service:
+        user_provider: fos_user.user_manager             # This property will be used when valid credentials are given to load the user upon access token creation

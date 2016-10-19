@@ -58,9 +58,9 @@ class UserController extends FOSRestController
     //actualizacion del usuario
     /**
      * PUT Route annotation.
-     * @Put("/user/{id}")
+     * @Put("/user")
      */
-    public function putUserAction(Request $request, $id)
+    public function putUserAction(Request $request)
     {
         $em = $this->getDoctrineManager();
 
@@ -68,6 +68,8 @@ class UserController extends FOSRestController
 
         //take id from request
         $id = $request->get('id');
+
+
 
         //return new JsonResponse($request->get('username'));
 
@@ -84,7 +86,8 @@ class UserController extends FOSRestController
         $userManager->updateUser($user, true);
         $em->flush();
 
-
+        $view = $this->view("Ok!", 200);
+        return $this->handleView($view);
         return new JsonResponse($user);
     }
 
